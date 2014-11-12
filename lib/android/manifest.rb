@@ -41,10 +41,18 @@ module Android
         @name = elem.attributes['name']
         @intent_filters = []
         unless elem.elements['intent-filter'].nil?
-          elem.elements['intent-filter'].each do |e|
-            next unless e.instance_of? REXML::Element
-            @intent_filters << IntentFilter.parse(e)
-          end
+          elem.elements.each do |element|
+            if element.name == "intent-filter"
+              element.each do |e|
+                next unless e.instance_of? REXML::Element
+                @intent_filters << IntentFilter.parse(e)
+              end
+            end  
+          end  
+          # elem.elements['intent-filter'].each do |e|
+          #   next unless e.instance_of? REXML::Element
+          #   @intent_filters << IntentFilter.parse(e)
+          # end
         end
         @metas = []
         elem.each_element('meta-data') do |e|
